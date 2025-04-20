@@ -122,7 +122,7 @@
     </div>
     
     <script>
-        // Game variables
+
         let randomNumber;
         let attempts = 0;
         let gameover = false;
@@ -130,7 +130,7 @@
         let bestScore = Infinity;
         let totalAttempts = 0;
         
-        // DOM elements
+
         const guessInput = document.getElementById('guess-input');
         const guessButton = document.getElementById('guess-button');
         const message = document.getElementById('message');
@@ -140,8 +140,7 @@
         const gamesPlayedDisplay = document.getElementById('games-played');
         const bestScoreDisplay = document.getElementById('best-score');
         const avgScoreDisplay = document.getElementById('avg-score');
-        
-        // Initialize the game
+    
         function initGame() {
             randomNumber = Math.floor(Math.random() * 100) + 1;
             attempts = 0;
@@ -157,13 +156,12 @@
             console.log("Secret number: " + randomNumber); // For debugging
         }
         
-        // Process a guess
+    
         function processGuess() {
             if (gameover) return;
             
             const userGuess = parseInt(guessInput.value);
-            
-            // Validate input
+    
             if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
                 message.textContent = "Please enter a valid number between 1 and 100.";
                 message.className = "";
@@ -173,7 +171,6 @@
             attempts++;
             attemptsDisplay.textContent = `Attempts: ${attempts}`;
             
-            // Check the guess
             if (userGuess > randomNumber) {
                 message.textContent = "Lower number please!";
                 message.className = "lower";
@@ -186,7 +183,7 @@
                 gameover = true;
                 newGameButton.classList.remove('hidden');
                 
-                // Update statistics
+        
                 gamesPlayed++;
                 totalAttempts += attempts;
                 if (attempts < bestScore) {
@@ -197,19 +194,19 @@
                 stats.classList.remove('hidden');
             }
             
-            // Clear the input field for the next guess
+        
             guessInput.value = '';
             guessInput.focus();
         }
         
-        // Update game statistics
+        
         function updateStats() {
             gamesPlayedDisplay.textContent = gamesPlayed;
             bestScoreDisplay.textContent = bestScore === Infinity ? '-' : bestScore;
             avgScoreDisplay.textContent = (totalAttempts / gamesPlayed).toFixed(1);
         }
         
-        // Event listeners
+        
         guessButton.addEventListener('click', processGuess);
         
         guessInput.addEventListener('keypress', function(event) {
@@ -220,7 +217,7 @@
         
         newGameButton.addEventListener('click', initGame);
         
-        // Start the first game
+        
         initGame();
     </script>
 </body>
