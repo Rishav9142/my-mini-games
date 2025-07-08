@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Mini Games</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --bg: #f9f9fc;
+      --card-bg: #fff;
+      --text: #333;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      padding: 3rem 1rem;
+      text-align: center;
+      color: var(--text);
+    }
+    h1 {
+      color: var(--primary);
+      font-size: 2.5rem;
+    }
+    p.subtitle {
+      font-size: 1.1rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+    .games {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .game-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      width: 280px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .game-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+    .game-card h2 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+    .game-card p {
+      font-size: 1rem;
+      color: #555;
+    }
+    .game-card a {
+      display: inline-block;
+      margin-top: 1rem;
+      text-decoration: none;
+      color: white;
+      background: var(--primary);
+      padding: 0.6rem 1.2rem;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+    .game-card a:hover {
+      background: #3730a3;
+    }
+    footer {
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 My Mini Games Collection</h1>
+  <p class="subtitle">Fun and interactive browser games built with HTML, CSS, and JavaScript</p>
 
+  <div class="games">
+    <div class="game-card">
+      <h2>🎯 Guess the Number</h2>
+      <p>Try to guess a number between 1 and 100 with the fewest attempts!</p>
+      <a href="guess-the-number/index.html" target="_blank">Play Now</a>
+    </div>
+    <!-- You can copy this block below for future games -->
+    <!--
+    <div class="game-card">
+      <h2>🧠 Memory Match</h2>
+      <p>Test your memory with this fun card-flipping game.</p>
+      <a href="memory-match/index.html" target="_blank">Play Now</a>
+    </div>
+    -->
+  </div>
+
+  <footer>
+    © 2025 Rishav Sharma. All rights reserved.
+  </footer>
+</body>
+</html>
