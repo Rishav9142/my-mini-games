@@ -1,1 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        
+        .game-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #guess-input {
+            padding: 10px;
+            font-size: 16px;
+            width: 100px;
+            margin-right: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            min-height: 24px;
+        }
+        
+        .higher {
+            color: #e74c3c;
+        }
+        
+        .lower {
+            color: #2980b9;
+        }
+        
+        .correct {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        #attempts {
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        #new-game {
+            margin-top: 20px;
+            background-color: #2ecc71;
+        }
+        
+        #new-game:hover {
+            background-color: #27ae60;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        #stats {
+            margin-top: 30px;
+            text-align: left;
+            background-color: #eee;
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Number Guessing Game</h1>
+        <p>I'm thinking of a number between 1 and 100. Can you guess it?</p>
+        
+        <div>
+            <input type="number" id="guess-input" min="1" max="100" placeholder="1-100">
+            <button id="guess-button">Guess</button>
+        </div>
+        
+        <div id="message"></div>
+        <div id="attempts"></div>
+        
+        <button id="new-game" class="hidden">Play Again</button>
+        
+        <div id="stats" class="hidden">
+            <h3>Game Statistics</h3>
+            <p>Games played: <span id="games-played">0</span></p>
+            <p>Best score: <span id="best-score">-</span> attempts</p>
+            <p>Average score: <span id="avg-score">-</span> attempts</p>
+        </div>
+    </div>
+    
+    <script>
 
+        let randomNumber;
+        let attempts = 0;
+        let gameover = false;
+        let gamesPlayed = 0;
+        let bestScore = Infinity;
+        let totalAttempts = 0;
+        
+
+        const guessInput = document.getElementById('guess-input');
+        const guessButton = document.getElementById('guess-button');
+        const message = document.getElementById('message');
+        const attemptsDisplay = document.getElementById('attempts');
+        const newGameButton = document.getElementById('new-game');
+        const stats = document.getElementById('stats');
+        const gamesPlayedDisplay = document.getElementById('games-played');
+        const bestScoreDisplay = document.getElementById('best-score');
+        const avgScoreDisplay = document.getElementById('avg-score');
+    
+        function initGame() {
+            randomNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 0;
+            gameover = false;
+            
+            message.textContent = '';
+            message.className = '';
+            attemptsDisplay.textContent = '';
+            guessInput.value = '';
+            guessInput.focus();
+            newGameButton.classList.add('hidden');
+            
+            console.log("Secret number: " + randomNumber); // For debugging
+        }
+        
+    
+        function processGuess() {
+            if (gameover) return;
+            
+            const userGuess = parseInt(guessInput.value);
+    
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.textContent = "Please enter a valid number between 1 and 100.";
+                message.className = "";
+                return;
+            }
+            
+            attempts++;
+            attemptsDisplay.textContent = `Attempts: ${attempts}`;
+            
+            if (userGuess > randomNumber) {
+                message.textContent = "Lower number please!";
+                message.className = "lower";
+            } else if (userGuess < randomNumber) {
+                message.textContent = "Higher number please!";
+                message.className = "higher";
+            } else {
+                message.textContent = `Congratulations! You guessed the number ${randomNumber} correctly!`;
+                message.className = "correct";
+                gameover = true;
+                newGameButton.classList.remove('hidden');
+                
+        
+                gamesPlayed++;
+                totalAttempts += attempts;
+                if (attempts < bestScore) {
+                    bestScore = attempts;
+                }
+                
+                updateStats();
+                stats.classList.remove('hidden');
+            }
+            
+        
+            guessInput.value = '';
+            guessInput.focus();
+        }
+        
+        
+        function updateStats() {
+            gamesPlayedDisplay.textContent = gamesPlayed;
+            bestScoreDisplay.textContent = bestScore === Infinity ? '-' : bestScore;
+            avgScoreDisplay.textContent = (totalAttempts / gamesPlayed).toFixed(1);
+        }
+        
+        
+        guessButton.addEventListener('click', processGuess);
+        
+        guessInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                processGuess();
+            }
+        });
+        
+        newGameButton.addEventListener('click', initGame);
+        
+        
+        initGame();
+    </script>
+</body>
+</html>
