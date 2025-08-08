@@ -116,35 +116,75 @@
       transition: all 0.3s ease;
       z-index: 1000;
       box-shadow: 0 4px 12px var(--shadow);
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .theme-toggle:hover {
-      transform: scale(1.1);
       box-shadow: 0 6px 20px var(--shadow-hover);
     }
 
-    .theme-toggle svg {
+    .theme-toggle:active {
+      transform: scale(0.95);
+    }
+
+    .theme-icon-wrapper {
+      position: relative;
       width: 24px;
       height: 24px;
-      display: block;
-      transition: all 0.3s ease;
+      transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .theme-toggle.switching .theme-icon-wrapper {
+      transform: rotate(360deg);
+    }
+
+    .theme-toggle svg {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      top: 0;
+      left: 0;
+      transition: opacity 0.3s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
     .sun-icon {
       color: #f59e0b;
+      opacity: 1;
+      transform: rotate(0deg);
     }
 
     .moon-icon {
       color: #6366f1;
-      display: none;
+      opacity: 0;
+      transform: rotate(180deg);
     }
 
     [data-theme="dark"] .sun-icon {
-      display: none;
+      opacity: 0;
+      transform: rotate(180deg);
     }
 
     [data-theme="dark"] .moon-icon {
-      display: block;
+      opacity: 1;
+      transform: rotate(360deg);
+    }
+
+    /* Additional animation for rays */
+    @keyframes spinRays {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .theme-toggle.switching .sun-icon {
+      animation: spinRays 0.6s ease;
     }
 
     /* Header */
@@ -476,12 +516,14 @@
   
   <!-- Theme Toggle -->
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-    <svg class="sun-icon" fill="currentColor" viewBox="0 0 20 20">
-      <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
-    </svg>
-    <svg class="moon-icon" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-    </svg>
+    <div class="theme-icon-wrapper">
+      <svg class="sun-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+      </svg>
+      <svg class="moon-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+      </svg>
+    </div>
   </button>
 
   <!-- Header -->
@@ -577,11 +619,23 @@
     // Theme toggle functionality
     function toggleTheme() {
       const html = document.documentElement;
+      const toggleBtn = document.querySelector('.theme-toggle');
       const currentTheme = html.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       
-      html.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
+      // Add switching class for animation
+      toggleBtn.classList.add('switching');
+      
+      // Remove switching class after animation completes
+      setTimeout(() => {
+        toggleBtn.classList.remove('switching');
+      }, 600);
+      
+      // Change theme with a slight delay for smooth transition
+      setTimeout(() => {
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      }, 300);
     }
 
     // Load saved theme preference or default to light mode
